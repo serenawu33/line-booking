@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>預約系統跳轉中...</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        async function main() {
+            // 初始化你的 LIFF
+            await liff.init({ liffId: "2009065757-yV5zsIQP" }); 
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                const profile = await liff.getProfile();
+                // 跳轉到 Tally 並將真實 UID 帶入 line_uid 隱藏欄位
+                const tallyUrl = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
+                window.location.replace(tallyUrl);
+            }
+        }
+        main();
+    </script>
+</head>
+<body>
+    <p style="text-align: center; margin-top: 50px;">正在開啟預約表單，請稍候...</p>
+</body>
+</html>
