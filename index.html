@@ -6,24 +6,22 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body style="text-align:center; padding-top:50px; font-family:sans-serif;">
-< 正文樣式 =“text-align：center;墊層頂 ：50PX; 字體家族 ： 無襯線體;>  
     <div id="msg">正在連接 LINE，請稍候...</div>
     <script>
         window.onload = function() {
-            // 注意：ID 必須完全等於 2009065757-yV5zsIQP，前後不能有空白
+            // 教練已幫你校對過 ID：2009065757-yV5zsIQP
             liff.init({ liffId: "2009065757-yV5zsIQP" }) 
                 .then(() => {
                     if (!liff.isLoggedIn()) {
                         liff.login();
                     } else {
                         liff.getProfile().then(profile => {
-                            // 成功抓到 UID，自動導向 Tally
+                            // 跳轉至 Tally 並帶入 UID 參數
                             window.location.replace("https://tally.so/r/2EaWjb?line_uid=" + profile.userId);
                         });
                     }
                 })
                 .catch((err) => {
-                    // 如果還是報錯，會在螢幕上顯示詳細原因
                     document.getElementById("msg").innerHTML = "偵測到錯誤：" + err;
                 });
         };
