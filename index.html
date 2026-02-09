@@ -2,30 +2,34 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>預約跳轉中</title>
+    <title>系統診斷中</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body style="text-align:center; padding-top:50px; font-family:sans-serif;">
-    <div id="msg">連線校準中，請稍候...</div>
+    <div id="debug-info" style="color: blue; margin-bottom: 20px;">正在讀取設定...</div>
+    <div id="msg">連線中...</div>
+
     <script>
         window.onload = function() {
-            // .trim() 會自動切除前後多餘的空格
-            const finalLiffId = "2009065757-yV5zsIQP".trim(); 
+            // 【手動校對區】請確保這串 ID 沒多空格、沒填錯
+            const myID = "2009065757-yV5zsIQP"; 
             
-            liff.init({ liffId: finalLiffId }) 
+            document.getElementById("debug-info").innerHTML = "目前使用的 ID: [" + myID + "]";
+
+            liff.init({ liffId: myID })
                 .then(() => {
                     if (!liff.isLoggedIn()) {
                         liff.login();
                     } else {
                         liff.getProfile().then(profile => {
                             // 跳轉至 Tally 並帶入 UID
-                            const tallyUrl = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
-                            window.location.replace(tallyUrl);
+                            const finalUrl = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
+                            window.location.replace(finalUrl);
                         });
                     }
                 })
                 .catch((err) => {
-                    document.getElementById("msg").innerHTML = "偵測到錯誤：" + err;
+                    document.getElementById("msg").innerHTML = "<b style='color:red;'>初始化失敗！</b><br>原因：" + err;
                 });
         };
     </script>
