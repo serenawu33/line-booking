@@ -2,34 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>系統診斷中</title>
+    <title>預約跳轉中</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body style="text-align:center; padding-top:50px; font-family:sans-serif;">
-    <div id="debug-info" style="color: blue; margin-bottom: 20px;">正在讀取設定...</div>
-    <div id="msg">連線中...</div>
+    <div id="version" style="font-size:10px; color:#ccc;">v1.0.1</div>
+    <div id="msg">正在連接 LINE，請稍候...</div>
 
     <script>
         window.onload = function() {
-            // 【手動校對區】請確保這串 ID 沒多空格、沒填錯
-            const myID = "2009065757-yV5zsIQP"; 
-            
-            document.getElementById("debug-info").innerHTML = "目前使用的 ID: [" + myID + "]";
+            // 【核心修正】強制清除前後空格，確保 ID 精準
+            const rawId = "2009065757-yV5zsIQP"; 
+            const finalLiffId = rawId.trim();
 
-            liff.init({ liffId: myID })
+            liff.init({ liffId: finalLiffId })
                 .then(() => {
                     if (!liff.isLoggedIn()) {
                         liff.login();
                     } else {
                         liff.getProfile().then(profile => {
-                            // 跳轉至 Tally 並帶入 UID
-                            const finalUrl = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
-                            window.location.replace(finalUrl);
+                            // 成功跳轉到 Tally
+                            const target = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
+                            window.location.replace(target);
                         });
                     }
                 })
                 .catch((err) => {
-                    document.getElementById("msg").innerHTML = "<b style='color:red;'>初始化失敗！</b><br>原因：" + err;
+                    document.getElementById("msg").innerHTML = 
+                        "<b style='color:red;'>連線失敗</b><br>錯誤代碼：" + err + 
+                        "<br>目前讀取 ID: [" + finalLiffId + "]";
                 });
         };
     </script>
