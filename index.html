@@ -2,35 +2,34 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>預約跳轉中</title>
+    <title>預約跳轉中 v1.0.3</title>
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body style="text-align:center; padding-top:50px; font-family:sans-serif;">
-    <div id="version" style="font-size:10px; color:#ccc;">v1.0.1</div>
+    <div style="font-size:10px; color:#ccc;">版本號：v1.0.3</div>
     <div id="msg">正在連接 LINE，請稍候...</div>
 
     <script>
         window.onload = function() {
-            // 【核心修正】強制清除前後空格，確保 ID 精準
-            const rawId = "2009065757-yV5zsIQP"; 
-            const finalLiffId = rawId.trim();
-
-            liff.init({ liffId: finalLiffId })
+            // 教練校對：2009065757-yV5zslQP (最後是小寫 l，不是大寫 I)
+            const finalLiffId = "2009065757-yV5zslQP".trim(); 
+            
+            liff.init({ liffId: finalLiffId }) 
                 .then(() => {
                     if (!liff.isLoggedIn()) {
                         liff.login();
                     } else {
                         liff.getProfile().then(profile => {
-                            // 成功跳轉到 Tally
-                            const target = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
-                            window.location.replace(target);
+                            // 成功抓到 UID，跳轉至 Tally 並帶入參數
+                            const tallyUrl = "https://tally.so/r/2EaWjb?line_uid=" + profile.userId;
+                            window.location.replace(tallyUrl);
                         });
                     }
                 })
                 .catch((err) => {
                     document.getElementById("msg").innerHTML = 
-                        "<b style='color:red;'>連線失敗</b><br>錯誤代碼：" + err + 
-                        "<br>目前讀取 ID: [" + finalLiffId + "]";
+                        "<b style='color:red;'>連線失敗</b><br>錯誤原因：" + err + 
+                        "<br>目前使用的 ID: [" + finalLiffId + "]";
                 });
         };
     </script>
